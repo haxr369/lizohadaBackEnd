@@ -40,7 +40,7 @@ const context = {};
 // JSON 형태로 변환
 const result = regionNames.map((name) => ({
   keyword: `${name} 여행`,
-  count: 17,
+  count: "17",
 }));
 // let cnt = 0;
 async function go() {

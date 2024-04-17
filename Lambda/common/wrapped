@@ -1,0 +1,26 @@
+import { blogScraper } from "./common/blogScraper.js";
+import { blogDetailScraper } from "./common/blogDetailScraper.mjs";
+import {
+  requestBathWrite,
+  requestRecentPostdate,
+} from "./common/ddbRequest.mjs";
+
+export async function wrappedAPI(putRequests) {
+  const recentPostDate = await requestRecentPostdate(body.keyword);
+
+  let blogs = await blogScraper(body.keyword, body.count, recentPostDate);
+  // map은 함수 콜을 하고 그 결과를 기다리고 다음 콜한다. 100개 스크랩에 -> 37초
+  // 매우 느린 방법이지만, 하나씩 하기에 막히진 않는다.
+  let putRequests = [];
+  for (const b of blogs) {
+    console.log(b.link);
+    const item = await blogDetailScraper(b);
+    putRequests.push({
+      PutRequest: {
+        Item: item,
+      },
+    });
+    await delay(1000);
+  }
+  requestBathWrite(putRequests);
+}

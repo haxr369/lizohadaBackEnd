@@ -13,7 +13,7 @@ import {
  */
 
 export const handler = async (event, context) => {
-  const body = event.body;
+  const body = event;
 
   try {
     // inputData = JSON.parse(body);
